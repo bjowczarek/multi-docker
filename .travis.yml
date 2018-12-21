@@ -1,0 +1,33 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t bjowczarek/docker-react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run bjowczarek/docker-react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t bjowczarek/multi-client ./client
+  - docker build -t bjowczarek/multi-nginx ./nginx
+  - docker build -t bjowczarek/multi-server ./server
+  - docker build -t bjowczarek/multi-worker ./worker
+  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push bjowczarek/multi-client
+  - docker push bjowczarek/multi-nginx
+  - docker push bjowczarek/multi-server
+  - docker push bjowczarek/multi-worker
+
+# deploy:
+#   provider: elasticbeanstalk
+#   region: "eu-west-2"
+#   app: "docker-simple-app"
+#   env: "DockerSimpleApp-env"
+#   bucket_name: "elasticbeanstalk-eu-west-2-922687003324"
+#   bucket_path: "docker-simple-app"
+#   on:
+#     branch: master
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key:
+#     secure: "$AWS_SECRET_KEY"
