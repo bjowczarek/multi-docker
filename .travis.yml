@@ -19,15 +19,15 @@ after_success:
   - docker push bjowczarek/multi-server
   - docker push bjowczarek/multi-worker
 
-# deploy:
-#   provider: elasticbeanstalk
-#   region: "eu-west-2"
-#   app: "docker-simple-app"
-#   env: "DockerSimpleApp-env"
-#   bucket_name: "elasticbeanstalk-eu-west-2-922687003324"
-#   bucket_path: "docker-simple-app"
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key:
-#     secure: "$AWS_SECRET_KEY"
+deploy:
+  provider: elasticbeanstalk
+  region: "eu-west-2"
+  app: "docker-multi"
+  env: "DockerMulti-env"
+  bucket_name: "elasticbeanstalk-eu-west-2-922687003324"
+  bucket_path: "docker-multi"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
